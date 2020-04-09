@@ -25,7 +25,108 @@ class MainViewModel(promiseManager: PromiseManager, val repository: SomeReposito
         }
     }
 
-    val repoProm = controlAsync(repository.getSomethingExpensiveUnstructured()).then(null, {
+    val repoProm = controlAsync(repository.getSomethingExpensiveUnstructured())
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            controlAsync(repository.getSomethingExpensiveUnstructured())
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            controlAsync(repository.getSomethingExpensiveUnstructured())
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            controlAsync(repository.getSomethingExpensiveUnstructured(true))
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+        .then{
+            cockCounter++
+            Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
+            return@then it
+        }
+    /*
+    .also {
+            Timber.d("MainViewModel : init ; RECURSE")
+            viewModelScope.asyncDefault {
+                val test = controlAsyncAwait(it)
+                Timber.d("MainViewModel : init ; RECURSE : test = %s", test)
+            }
+        }
+     */
+
+    /*val repoProm = controlAsync(repository.getSomethingExpensiveUnstructured()).then(null, {
         cockCounter++
         Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
         controlAsync(repository.getSomethingExpensiveUnstructured())
@@ -41,7 +142,7 @@ class MainViewModel(promiseManager: PromiseManager, val repository: SomeReposito
         cockCounter++
         Timber.d("MainViewModel : init : repoProm = %s AND COCK = %s", it, cockCounter)
         "$it AND COCK = $cockCounter"
-    }, null)
+    }, null)*/
 
     val repoWrapperProm: Promise<String> by lazy {
         CompletableDeferred<String>().also {completable ->
@@ -54,7 +155,7 @@ class MainViewModel(promiseManager: PromiseManager, val repository: SomeReposito
 
     val messageFlow = flow<String>{
         emit("Get ready for some coroutine stuff...")
-        emit(repoProm.await())
+        emit(controlAsyncAwait(repoProm.await()))
         emit(controlAsyncAwait(viewModelScope.asyncDefault {
             cockCounter++
             if(cockCounter == 5){
@@ -64,15 +165,19 @@ class MainViewModel(promiseManager: PromiseManager, val repository: SomeReposito
             }
         }))
         delay(5000)
-        emit(controlAsyncAwait(repoWrapperProm.then(null){
+        emit(controlAsyncAwait(repoWrapperProm.then{
             if(cockCounter == 5){
-                repository.getSomethingExpensiveUnstructured(true)
+                controlAsync(repository.getSomethingExpensiveUnstructured(true))
             }else{
                 controlAsync(viewModelScope.asyncDefault {
+                    Timber.d("CANCELING")
+                    controlCancelAllPromises()
                     it
                 })
             }
-        }))
+        }.then {finalCockRez ->
+            return@then controlAsync(finalCockRez)
+        }).await())
         /*emit(controlAsyncAwait(repoWrapperProm.then({
             if(cockCounter == 5){
                 "IN THE BUTT"

@@ -29,6 +29,7 @@ class SomeRepository(private val coroutineScope: IOCoroutineScope, private val u
             unconfinedCoroutineScope.asyncUnconfined {
                 delay(1000)
                 "deferred function is complete! UNCONFINED"
+
             }
         }
     }
