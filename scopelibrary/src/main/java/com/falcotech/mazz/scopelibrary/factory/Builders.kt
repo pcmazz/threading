@@ -205,6 +205,11 @@ fun <T> CoroutineScope.asyncDefault(
     block: suspend CoroutineScope.() -> T
 ): Deferred<T> = async(coroutineContext.dispatcherProvider.default + context, start, block)
 
+fun <T> CoroutineScope.asyncDefault(
+    start: CoroutineStart = CoroutineStart.LAZY,
+    block: suspend CoroutineScope.() -> T
+): Deferred<T> = async(coroutineContext.dispatcherProvider.default, start, block)
+
 /**
  * Creates a coroutine and returns its future result as an implementation of [Deferred].
  *
