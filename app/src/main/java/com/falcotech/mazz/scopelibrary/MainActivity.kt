@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val factory = viewModelFactory {
-        MainViewModel(DefaultPromiseManager(), SomeRepository(iOCoroutineScope()))
+        MainViewModel(DefaultPromiseManager(), SomeRepository(iOCoroutineScope(), unconfinedCoroutineScope()))
     }
 
     val viewModel: MainViewModel by lazy {
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 Timber.v("I'm using the main dispatcher!")
                 tvMessage.text = message
             }
-            .onCompletion { tvMessage.text = "All done!" }
+            .onCompletion { tvMessage.text = tvMessage.text.toString() + "\nAll done!" }
             // the .flowOn____() operator pulls the desired dispatcher out of the CoroutineScope
             // and applies it.  So in this case .flowOnMain() is pulling
             // the dispatcher assigned to "main" out of `ioDefaultScope`

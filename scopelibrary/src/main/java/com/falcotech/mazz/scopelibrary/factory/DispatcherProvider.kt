@@ -15,6 +15,8 @@ interface DispatcherProvider : CoroutineContext.Element {
 
     override val key: CoroutineContext.Key<*> get() = Key
 
+    val providerName: String
+
     val default: CoroutineDispatcher
     val io: CoroutineDispatcher
     val main: CoroutineDispatcher
@@ -35,9 +37,16 @@ fun dispatcherProvider(): DispatcherProvider =
  */
 class DefaultDispatcherProvider :
     DispatcherProvider {
-    override val default: CoroutineDispatcher = Dispatchers.Default
-    override val io: CoroutineDispatcher = Dispatchers.IO
-    override val main: CoroutineDispatcher get() = Dispatchers.Main
-    override val mainImmediate: CoroutineDispatcher get() = Dispatchers.Main.immediate
-    override val unconfined: CoroutineDispatcher = Dispatchers.Unconfined
+    override val providerName: String
+        get() = this.javaClass.simpleName
+    override val default: CoroutineDispatcher
+        get() = Dispatchers.Default
+    override val io: CoroutineDispatcher
+        get() = Dispatchers.IO
+    override val main: CoroutineDispatcher
+        get() = Dispatchers.Main
+    override val mainImmediate: CoroutineDispatcher
+        get() = Dispatchers.Main.immediate
+    override val unconfined: CoroutineDispatcher
+        get() = Dispatchers.Unconfined
 }

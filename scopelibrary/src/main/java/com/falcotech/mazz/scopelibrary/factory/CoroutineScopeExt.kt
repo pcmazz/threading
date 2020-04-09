@@ -74,3 +74,6 @@ val CoroutineScope.dispatcherProvider: DispatcherProvider
  */
 val CoroutineContext.dispatcherProvider: DispatcherProvider
     get() = get(DispatcherProvider) ?: DefaultDispatcherProvider()
+
+val CoroutineContext.providerName: String
+    get() = (get(DispatcherProvider) ?: DefaultDispatcherProvider()).providerName
